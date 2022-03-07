@@ -2,7 +2,7 @@ namespace Api;
 
 public sealed class StudentRepository
 {
-    private static readonly List<Student?> _existingStudents = new List<Student?>
+    private static readonly List<Student?> _existingStudents = new()
     {
         Alice(),
         Bob()

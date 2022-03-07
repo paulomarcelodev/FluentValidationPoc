@@ -7,15 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="WeatherForecast.cs" />
+        <Compile Remove="WeatherForecast.cs"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DomainModel\DomainModel.csproj" />
+        <ProjectReference Include="..\DomainModel\DomainModel.csproj"/>
     </ItemGroup>
 
 </Project>
