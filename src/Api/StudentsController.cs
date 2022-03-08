@@ -17,6 +17,13 @@ public class StudentsController : Controller
     [HttpPost]
     public IActionResult Register([FromBody] DataContracts.RegisterRequest request)
     {
+        var validator = new RegisterRequestValidator();
+        var validationResult = validator.Validate(request);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors.First().ErrorMessage);
+        }
+
         var student = new Student(request.Email, request.Name, request.Address);
         _studentRepository.Save(student);
 
