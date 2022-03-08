@@ -15,7 +15,7 @@ public class StudentsController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register([FromBody] DataContracts.RegisterRequest request)
+    public IActionResult Register([FromBody] RegisterRequest request)
     {
         var validator = new RegisterRequestValidator();
         var validationResult = validator.Validate(request);
@@ -30,7 +30,7 @@ public class StudentsController : Controller
         var student = new Student(request.Email, request.Name, addresses);
         _studentRepository.Save(student);
 
-        var response = new DataContracts.RegisterResponse
+        var response = new RegisterResponse
         {
             Id = student.Id
         };
@@ -38,7 +38,7 @@ public class StudentsController : Controller
     }
 
     [HttpPut("{id:long}")]
-    public IActionResult EditPersonalInfo(long id, [FromBody] DataContracts.EditPersonalInfoRequest request)
+    public IActionResult EditPersonalInfo(long id, [FromBody] EditPersonalInfoRequest request)
     {
         var validator = new EditPersonalInfoRequestValidator();
         var validationResult = validator.Validate(request);
@@ -59,7 +59,7 @@ public class StudentsController : Controller
     }
 
     [HttpPost("{id:long}/enrollments")]
-    public IActionResult Enroll(long id, [FromBody] DataContracts.EnrollRequest request)
+    public IActionResult Enroll(long id, [FromBody] EnrollRequest request)
     {
         var student = _studentRepository.GetById(id);
         if (student is null) return NotFound();
@@ -82,13 +82,13 @@ public class StudentsController : Controller
         var student = _studentRepository.GetById(id);
         if (student is null) return NotFound();
 
-        var response = new DataContracts.GetResponse
+        var response = new GetResponse
         {
-            Addresses = student.Addresses.Select(x => new DataContracts.AddressDto
+            Addresses = student.Addresses.Select(x => new AddressDto
                 { State = x.State, City = x.City, Street = x.Street, ZipCode = x.ZipCode, }).ToArray(),
             Email = student.Email!,
             Name = student.Name!,
-            Enrollments = student.Enrollments.Select(x => new DataContracts.CourseEnrollmentDto
+            Enrollments = student.Enrollments.Select(x => new CourseEnrollmentDto
             {
                 Course = x.Course.Name,
                 Grade = x.Grade.ToString()

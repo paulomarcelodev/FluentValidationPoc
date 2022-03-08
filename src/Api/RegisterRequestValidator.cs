@@ -1,9 +1,8 @@
-using System.Data;
 using FluentValidation;
 
 namespace Api;
 
-public class RegisterRequestValidator : AbstractValidator<DataContracts.RegisterRequest>
+public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterRequestValidator()
     {
@@ -20,7 +19,7 @@ public class RegisterRequestValidator : AbstractValidator<DataContracts.Register
     }
 }
 
-public class AddressValidator : AbstractValidator<DataContracts.AddressDto>
+public class AddressValidator : AbstractValidator<AddressDto>
 {
     public AddressValidator()
     {
@@ -39,7 +38,7 @@ public class AddressValidator : AbstractValidator<DataContracts.AddressDto>
     }
 }
 
-public class AddressesValidator : AbstractValidator<DataContracts.AddressDto[]>
+public class AddressesValidator : AbstractValidator<AddressDto[]>
 {
     public AddressesValidator()
     {
@@ -55,8 +54,7 @@ public class AddressesValidator : AbstractValidator<DataContracts.AddressDto[]>
     }
 }
 
-
-public class EditPersonalInfoRequestValidator : AbstractValidator<DataContracts.EditPersonalInfoRequest>
+public class EditPersonalInfoRequestValidator : AbstractValidator<EditPersonalInfoRequest>
 {
     public EditPersonalInfoRequestValidator()
     {
