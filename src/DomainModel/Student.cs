@@ -4,7 +4,7 @@ public class Student : Entity
 {
     public string Email { get; } = null!;
     public string Name { get; private set; } = null!;
-    public Address Address { get; private set; } = null!;
+    public Address[] Addresses { get; private set; } = null!;
 
     private readonly List<Enrollment> _enrollments = new();
     public virtual IReadOnlyList<Enrollment> Enrollments => _enrollments.ToList();
@@ -13,17 +13,17 @@ public class Student : Entity
     {
     }
 
-    public Student(string email, string name, Address address)
+    public Student(string email, string name, Address[] addresses)
         : this()
     {
         Email = email;
-        EditPersonalInfo(name, address);
+        EditPersonalInfo(name, addresses);
     }
 
-    public void EditPersonalInfo(string name, Address address)
+    public void EditPersonalInfo(string name, Address[] addresses)
     {
         Name = name;
-        Address = address;
+        Addresses = addresses;
     }
 
     public virtual void Enroll(Course course, Grade grade)

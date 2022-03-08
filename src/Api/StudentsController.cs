@@ -24,9 +24,10 @@ public class StudentsController : Controller
             return BadRequest(validationResult.Errors.First().ErrorMessage);
         }
 
-        var address = new Address(request.Address.State, request.Address.City, request.Address.Street,
-            request.Address.ZipCode);
-        var student = new Student(request.Email, request.Name, address);
+        var addresses = request.Addresses
+            .Select(x => new Address(x.State, x.City, x.Street, x.ZipCode))
+            .ToArray();
+        var student = new Student(request.Email, request.Name, addresses);
         _studentRepository.Save(student);
 
         var response = new DataContracts.RegisterResponse
@@ -46,11 +47,12 @@ public class StudentsController : Controller
             return BadRequest(validationResult.Errors.First().ErrorMessage);
         }
 
+        var addresses = request.Addresses
+            .Select(x => new Address(x.State, x.City, x.Street, x.ZipCode))
+            .ToArray();
         var student = _studentRepository.GetById(id);
         if (student is null) return NotFound();
-        student.EditPersonalInfo(request.Name, new Address(request.Address.State, request.Address.City,
-            request.Address.Street,
-            request.Address.ZipCode));
+        student.EditPersonalInfo(request.Name, addresses);
         _studentRepository.Save(student);
 
         return Ok();
@@ -82,13 +84,8 @@ public class StudentsController : Controller
 
         var response = new DataContracts.GetResponse
         {
-            Address = new DataContracts.AddressDto
-            {
-                State = student.Address!.State,
-                City = student.Address!.City,
-                Street = student.Address!.Street,
-                ZipCode = student.Address!.ZipCode,
-            },
+            Addresses = student.Addresses.Select(x => new DataContracts.AddressDto
+                { State = x.State, City = x.City, Street = x.Street, ZipCode = x.ZipCode, }).ToArray(),
             Email = student.Email!,
             Name = student.Name!,
             Enrollments = student.Enrollments.Select(x => new DataContracts.CourseEnrollmentDto

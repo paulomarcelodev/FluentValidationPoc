@@ -1,3 +1,4 @@
+using System.Data;
 using FluentValidation;
 
 namespace Api;
@@ -13,8 +14,9 @@ public class RegisterRequestValidator : AbstractValidator<DataContracts.Register
             .NotEmpty()
             .MaximumLength(150)
             .EmailAddress();
-
-        RuleFor(x => x.Address).NotNull().SetValidator(new AddressValidator()!);
+        RuleFor(x => x.Addresses)
+            .NotNull()
+            .SetValidator(new AddressesValidator());
     }
 }
 
@@ -37,6 +39,22 @@ public class AddressValidator : AbstractValidator<DataContracts.AddressDto>
     }
 }
 
+public class AddressesValidator : AbstractValidator<DataContracts.AddressDto[]>
+{
+    public AddressesValidator()
+    {
+        RuleFor(x => x)
+            .NotNull().Must(x => x?.Length is >= 1 and <= 3)
+            .WithName("Addresses")
+            .WithMessage("The number of addresses must be between 1 and 3")
+            .ForEach(x =>
+            {
+                x.NotNull();
+                x.SetValidator(new AddressValidator());
+            });
+    }
+}
+
 
 public class EditPersonalInfoRequestValidator : AbstractValidator<DataContracts.EditPersonalInfoRequest>
 {
@@ -45,6 +63,8 @@ public class EditPersonalInfoRequestValidator : AbstractValidator<DataContracts.
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(200);
-        RuleFor(x => x.Address).NotNull().SetValidator(new AddressValidator()!);
+        RuleFor(x => x.Addresses)
+            .NotNull()
+            .SetValidator(new AddressesValidator());
     }
 }
