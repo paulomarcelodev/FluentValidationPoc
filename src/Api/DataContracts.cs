@@ -4,9 +4,17 @@ public class DataContracts
 {
     public class RegisterRequest
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public AddressDto? Address { get; set; }
+    }
+
+    public class AddressDto
+    {
+        public string State { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string ZipCode { get; set; }
     }
 
     public class RegisterResponse
@@ -17,7 +25,7 @@ public class DataContracts
     public class EditPersonalInfoRequest
     {
         public string Name { get; set; }
-        public string Address { get; set; }
+        public AddressDto Address { get; set; }
     }
 
     public class EnrollRequest
@@ -35,7 +43,7 @@ public class DataContracts
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
+        public AddressDto Address { get; set; }
         public CourseEnrollmentDto[] Enrollments { get; set; }
     }
 }

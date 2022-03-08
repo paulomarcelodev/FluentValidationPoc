@@ -19,12 +19,14 @@ public class StudentsController : Controller
     {
         var validator = new RegisterRequestValidator();
         var validationResult = validator.Validate(request);
-        if (!validationResult.IsValid)
+        if (validationResult.IsValid == false)
         {
             return BadRequest(validationResult.Errors.First().ErrorMessage);
         }
 
-        var student = new Student(request.Email, request.Name, request.Address);
+        var address = new Address(request.Address.State, request.Address.City, request.Address.Street,
+            request.Address.ZipCode);
+        var student = new Student(request.Email, request.Name, address);
         _studentRepository.Save(student);
 
         var response = new DataContracts.RegisterResponse
@@ -37,9 +39,18 @@ public class StudentsController : Controller
     [HttpPut("{id:long}")]
     public IActionResult EditPersonalInfo(long id, [FromBody] DataContracts.EditPersonalInfoRequest request)
     {
+        var validator = new EditPersonalInfoRequestValidator();
+        var validationResult = validator.Validate(request);
+        if (validationResult.IsValid == false)
+        {
+            return BadRequest(validationResult.Errors.First().ErrorMessage);
+        }
+
         var student = _studentRepository.GetById(id);
         if (student is null) return NotFound();
-        student.EditPersonalInfo(request.Name, request.Address);
+        student.EditPersonalInfo(request.Name, new Address(request.Address.State, request.Address.City,
+            request.Address.Street,
+            request.Address.ZipCode));
         _studentRepository.Save(student);
 
         return Ok();
@@ -71,7 +82,13 @@ public class StudentsController : Controller
 
         var response = new DataContracts.GetResponse
         {
-            Address = student.Address!,
+            Address = new DataContracts.AddressDto
+            {
+                State = student.Address!.State,
+                City = student.Address!.City,
+                Street = student.Address!.Street,
+                ZipCode = student.Address!.ZipCode,
+            },
             Email = student.Email!,
             Name = student.Name!,
             Enrollments = student.Enrollments.Select(x => new DataContracts.CourseEnrollmentDto

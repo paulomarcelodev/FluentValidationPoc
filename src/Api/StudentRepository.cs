@@ -38,7 +38,8 @@ public sealed class StudentRepository
 
     private static Student? Alice()
     {
-        var alice = new Student("alice@gmail.com", "Alice Alison", "1234 Main St, Arlington, VA, 22201");
+        var alice = new Student("alice@gmail.com", "Alice Alison",
+            new Address("VA", "Arlington", "1234 Main St", "22201"));
         SetId(alice, 1);
         alice.Enroll(new Course(1, "Calculus", 5), Grade.A);
 
@@ -47,7 +48,8 @@ public sealed class StudentRepository
 
     private static Student? Bob()
     {
-        var bob = new Student("bob@gmail.com", "Bob Bobson", "2345 Second St, Barlington, VA, 22202");
+        var bob = new Student("bob@gmail.com", "Bob Bobson",
+            new Address("VA", "Barlington", "2345 Second St", "22202"));
         SetId(bob, 2);
         bob.Enroll(new Course(2, "History", 4), Grade.B);
 
